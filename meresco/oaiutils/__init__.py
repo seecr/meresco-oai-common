@@ -27,3 +27,4 @@ from ._partition import *
 from ._resumptiontoken import *
 from ._oaidownloadprocessor import *
 from ._stamp import *
+from ._updateadapter import *

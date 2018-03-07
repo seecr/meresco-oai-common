@@ -1,9 +1,11 @@
-# -*- coding: utf-8 -*-
 ## begin license ##
 #
 # "Meresco Oai Utils" are utils to support "Meresco Oai".
 #
-# Copyright (C) 2018 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2010 Seek You Too (CQ2) http://www.cq2.nl
+# Copyright (C) 2010-2011 Stichting Kennisnet http://www.kennisnet.nl
+# Copyright (C) 2011-2012, 2014, 2018 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2014 Stichting Bibliotheek.nl (BNL) http://www.bibliotheek.nl
 #
 # This file is part of "Meresco Oai Utils"
 #
@@ -23,22 +25,15 @@
 #
 ## end license ##
 
-from os import getuid
-assert getuid() != 0, "Do not run tests as 'root'"
+from meresco.core import Observable
+from meresco.xml.namespaces import xpath
 
-from seecrdeps import includeParentAndDeps, cleanup     #DO_NOT_DISTRIBUTE
-includeParentAndDeps(__file__, scanForDeps=True)        #DO_NOT_DISTRIBUTE
-cleanup(__file__)                                       #DO_NOT_DISTRIBUTE
 
-import unittest
-from warnings import simplefilter
-simplefilter('default')
+class UpdateAdapterFromOaiDownloadProcessor(Observable):
+    def add(self, identifier, lxmlNode, *args, **kwargs):
+        if xpath(lxmlNode, '/oai:record/oai:header[@status="deleted"]'):
+            yield self.all.delete(identifier=identifier)
+        else:
+            yield self.all.add(identifier=identifier, partname='record', lxmlNode=lxmlNode)
 
-from oaidownloadprocessortest import OaiDownloadProcessorTest
-from partitiontest import PartitionTest
-from resumptiontokentest import ResumptionTokenTest
-from stamptest import StampTest
-from updateadaptertest import UpdateAdapterTest
-
-if __name__ == '__main__':
-    unittest.main()
+__all__ = ['UpdateAdapterFromOaiDownloadProcessor']
