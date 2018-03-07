@@ -1,9 +1,10 @@
-# -*- coding: utf-8 -*-
 ## begin license ##
 #
 # "Meresco Oai Utils" are utils to support "Meresco Oai".
 #
-# Copyright (C) 2018 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2014-2015, 2018 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2014 Stichting Bibliotheek.nl (BNL) http://www.bibliotheek.nl
+# Copyright (C) 2015 Koninklijke Bibliotheek (KB) http://www.kb.nl
 #
 # This file is part of "Meresco Oai Utils"
 #
@@ -23,21 +24,5 @@
 #
 ## end license ##
 
-from os import getuid
-assert getuid() != 0, "Do not run tests as 'root'"
-
-from seecrdeps import includeParentAndDeps, cleanup     #DO_NOT_DISTRIBUTE
-includeParentAndDeps(__file__, scanForDeps=True)        #DO_NOT_DISTRIBUTE
-cleanup(__file__)                                       #DO_NOT_DISTRIBUTE
-
-import unittest
-from warnings import simplefilter
-simplefilter('default')
-
-from oaidownloadprocessortest import OaiDownloadProcessorTest
-from partitiontest import PartitionTest
-from resumptiontokentest import ResumptionTokenTest
-from stamptest import StampTest
-
-if __name__ == '__main__':
-    unittest.main()
+VERSION = '$Version: 5.x$'[9:-1].strip()
+__all__ = ['VERSION']

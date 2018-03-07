@@ -29,8 +29,7 @@
 #
 ## end license ##
 
-from meresco.oai.resumptiontoken import ResumptionToken, resumptionTokenFromString
-from meresco.oai.oaijazz import Partition
+from meresco.oaiutils import ResumptionToken, resumptionTokenFromString, Partition
 from seecr.test import SeecrTestCase
 
 

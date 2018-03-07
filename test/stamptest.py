@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ## begin license ##
 #
 # "Meresco Oai Utils" are utils to support "Meresco Oai".
@@ -23,21 +22,18 @@
 #
 ## end license ##
 
-from os import getuid
-assert getuid() != 0, "Do not run tests as 'root'"
+from unittest import TestCase
+from meresco.oaiutils import stamp2zulutime, timeToNumber
 
-from seecrdeps import includeParentAndDeps, cleanup     #DO_NOT_DISTRIBUTE
-includeParentAndDeps(__file__, scanForDeps=True)        #DO_NOT_DISTRIBUTE
-cleanup(__file__)                                       #DO_NOT_DISTRIBUTE
+class StampTest(TestCase):
 
-import unittest
-from warnings import simplefilter
-simplefilter('default')
+    def testStamp2Zulutime(self):
+        self.assertEquals("2012-10-04T09:21:04Z", stamp2zulutime("1349342464030008"))
+        self.assertEquals("", stamp2zulutime(None))
+        self.assertRaises(Exception, stamp2zulutime, "not-a-stamp")
+        self.assertEquals("2012-10-04T09:21:04.030008Z", stamp2zulutime("1349342464030008", preciseDatestamp=True))
 
-from oaidownloadprocessortest import OaiDownloadProcessorTest
-from partitiontest import PartitionTest
-from resumptiontokentest import ResumptionTokenTest
-from stamptest import StampTest
+    def testTimeToNumber(self):
+        self.assertEqual(1349342464000000, timeToNumber("2012-10-04T09:21:04Z"))
+        self.assertEqual(9223372036854775807000000L, timeToNumber("deze"))
 
-if __name__ == '__main__':
-    unittest.main()

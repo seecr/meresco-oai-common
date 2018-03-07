@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ## begin license ##
 #
 # "Meresco Oai Utils" are utils to support "Meresco Oai".
@@ -23,21 +22,8 @@
 #
 ## end license ##
 
-from os import getuid
-assert getuid() != 0, "Do not run tests as 'root'"
-
-from seecrdeps import includeParentAndDeps, cleanup     #DO_NOT_DISTRIBUTE
-includeParentAndDeps(__file__, scanForDeps=True)        #DO_NOT_DISTRIBUTE
-cleanup(__file__)                                       #DO_NOT_DISTRIBUTE
-
-import unittest
-from warnings import simplefilter
-simplefilter('default')
-
-from oaidownloadprocessortest import OaiDownloadProcessorTest
-from partitiontest import PartitionTest
-from resumptiontokentest import ResumptionTokenTest
-from stamptest import StampTest
-
-if __name__ == '__main__':
-    unittest.main()
+from .__version__ import *
+from ._partition import *
+from ._resumptiontoken import *
+from ._oaidownloadprocessor import *
+from ._stamp import *

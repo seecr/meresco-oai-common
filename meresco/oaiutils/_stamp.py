@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ## begin license ##
 #
 # "Meresco Oai Utils" are utils to support "Meresco Oai".
@@ -23,21 +22,26 @@
 #
 ## end license ##
 
-from os import getuid
-assert getuid() != 0, "Do not run tests as 'root'"
+from time import time, strftime, gmtime, strptime
+from calendar import timegm
+from sys import maxint
 
-from seecrdeps import includeParentAndDeps, cleanup     #DO_NOT_DISTRIBUTE
-includeParentAndDeps(__file__, scanForDeps=True)        #DO_NOT_DISTRIBUTE
-cleanup(__file__)                                       #DO_NOT_DISTRIBUTE
+def stamp2zulutime(stamp, preciseDatestamp=False):
+    if stamp is None:
+        return ''
+    stamp = int(stamp)
+    microseconds = ".%06d" % (stamp % DATESTAMP_FACTOR) if preciseDatestamp else ""
+    return "%s%sZ" % (strftime('%Y-%m-%dT%H:%M:%S', gmtime(stamp / DATESTAMP_FACTOR)), microseconds)
 
-import unittest
-from warnings import simplefilter
-simplefilter('default')
+def timestamp():
+    return int(time() * DATESTAMP_FACTOR)
 
-from oaidownloadprocessortest import OaiDownloadProcessorTest
-from partitiontest import PartitionTest
-from resumptiontokentest import ResumptionTokenTest
-from stamptest import StampTest
+def timeToNumber(time):
+    try:
+        return int(timegm(strptime(time, '%Y-%m-%dT%H:%M:%SZ')) * DATESTAMP_FACTOR)
+    except (ValueError, OverflowError):
+        return maxint * DATESTAMP_FACTOR
 
-if __name__ == '__main__':
-    unittest.main()
+DATESTAMP_FACTOR = 1000000
+
+__all__ = ['stamp2zulutime', 'timestamp', 'timeToNumber']

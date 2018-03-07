@@ -25,7 +25,7 @@
 
 from seecr.test import SeecrTestCase
 
-from meresco.oai._partition import Partition
+from meresco.oaiutils import Partition
 
 class PartitionTest(SeecrTestCase):
     def testDisallowed(self):

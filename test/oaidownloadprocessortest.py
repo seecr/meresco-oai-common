@@ -42,7 +42,7 @@ from weightless.io import Suspend
 from meresco.core import Observable
 from meresco.components import lxmltostring, Schedule
 
-from meresco.oai import OaiDownloadProcessor
+from meresco.oaiutils import OaiDownloadProcessor
 
 
 class OaiDownloadProcessorTest(SeecrTestCase):
