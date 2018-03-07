@@ -1,0 +1,4 @@
+python-weightless-core (>= 0.10.10.1)
+python-weightless-core (<< 0.11)
+python-seecr-test (>= 1.4.20.1)
+python-seecr-test (<< 1.5)
