@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ## begin license ##
 #
 # "Meresco Oai Common" are utils to support "Meresco Oai".
@@ -23,24 +22,5 @@
 #
 ## end license ##
 
-from os import getuid
-assert getuid() != 0, "Do not run tests as 'root'"
-
-from seecrdeps import includeParentAndDeps, cleanup     #DO_NOT_DISTRIBUTE
-includeParentAndDeps(__file__, scanForDeps=True)        #DO_NOT_DISTRIBUTE
-cleanup(__file__)                                       #DO_NOT_DISTRIBUTE
-
-import unittest
-from warnings import simplefilter
-simplefilter('default')
-
-from oaidownloadprocessortest import OaiDownloadProcessorTest
-from partitiontest import PartitionTest
-from resumptiontokentest import ResumptionTokenTest
-from stamptest import StampTest
-from updateadaptertest import UpdateAdapterTest
-
-from tools.iterateoaipmhtest import IterateOaiPmhTest
-
-if __name__ == '__main__':
-    unittest.main()
+from .iterateoaipmh import iterateOaiPmh, OaiListRequest, OaiBatch, OaiItem
+from ._parse import parseOaiPmhListArguments

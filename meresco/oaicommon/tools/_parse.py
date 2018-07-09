@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ## begin license ##
 #
 # "Meresco Oai Common" are utils to support "Meresco Oai".
@@ -23,24 +22,15 @@
 #
 ## end license ##
 
-from os import getuid
-assert getuid() != 0, "Do not run tests as 'root'"
+from urlparse import parse_qs
 
-from seecrdeps import includeParentAndDeps, cleanup     #DO_NOT_DISTRIBUTE
-includeParentAndDeps(__file__, scanForDeps=True)        #DO_NOT_DISTRIBUTE
-cleanup(__file__)                                       #DO_NOT_DISTRIBUTE
-
-import unittest
-from warnings import simplefilter
-simplefilter('default')
-
-from oaidownloadprocessortest import OaiDownloadProcessorTest
-from partitiontest import PartitionTest
-from resumptiontokentest import ResumptionTokenTest
-from stamptest import StampTest
-from updateadaptertest import UpdateAdapterTest
-
-from tools.iterateoaipmhtest import IterateOaiPmhTest
-
-if __name__ == '__main__':
-    unittest.main()
+def parseOaiPmhListArguments(url):
+    baseurl, metadataPrefix, set = url, None, None
+    parts = baseurl.rsplit('?', 1)
+    if len(parts) == 2:
+        baseurl, query = parts
+        if query:
+            arguments = parse_qs(query)
+            metadataPrefix = arguments.get('metadataPrefix', [None])[0]
+            set = arguments.get('set', [None])[0]
+    return baseurl, metadataPrefix, set
