@@ -24,3 +24,4 @@
 
 from .iterateoaipmh import iterateOaiPmh, OaiListRequest, OaiBatch, OaiItem
 from ._parse import parseOaiPmhListArguments
+from ._dumpoai import dumpOai
