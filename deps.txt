@@ -1,5 +1,4 @@
-python-lxml (>= 3.4.0)
-python-lxml (<< 4.0)
+python-lxml
 python-meresco-components (>= 4.15.17)
 python-meresco-components (<< 4.16)
 python-meresco-core (>= 4.0.8)
