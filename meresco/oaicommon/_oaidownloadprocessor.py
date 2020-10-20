@@ -32,7 +32,7 @@ from os import makedirs, rename
 from os.path import join, isfile, isdir
 from traceback import format_exc
 from time import time
-from urllib import urlencode
+from urllib.parse import urlencode
 from uuid import uuid4
 from simplejson import dump, loads
 
@@ -129,7 +129,7 @@ class OaiDownloadProcessor(Observable):
         headers = "X-Meresco-Oai-Client-Identifier: %s\r\n" % self._identifier
         userAgent = self._userAgent
         if additionalHeaders:
-            headers += ''.join("{0}: {1}\r\n".format(k, v) for k, v in additionalHeaders.items())
+            headers += ''.join("{0}: {1}\r\n".format(k, v) for k, v in list(additionalHeaders.items()))
             userAgent = additionalHeaders.pop('User-Agent', self._userAgent)
         headers += "User-Agent: %s\r\n" % userAgent
         return request % (self._path, urlencode(arguments), headers)
@@ -192,7 +192,7 @@ class OaiDownloadProcessor(Observable):
                     datestamp = child.text
             try:
                 yield self._add(identifier=identifier, lxmlNode=ElementTree(item), datestamp=datestamp)
-            except Exception, e:
+            except Exception as e:
                 self._logError(format_exc())
                 self._logError("While processing:")
                 self._logError(lxmltostring(item))
@@ -215,7 +215,7 @@ class OaiDownloadProcessor(Observable):
         return HarvestStateView(self)
 
     def handleShutdown(self):
-        print 'handle shutdown: saving OaiDownloadProcessor %s' % self._stateFilePath
+        print('handle shutdown: saving OaiDownloadProcessor %s' % self._stateFilePath)
         from sys import stdout; stdout.flush()
         self.commit()
 

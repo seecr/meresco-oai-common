@@ -34,7 +34,7 @@ class Partition(object):
             raise ValueError('Expected at least 2 partitions.')
         if total > 10:
             raise ValueError('Expected max 10 partitions.')
-        if not parts or not set(parts).issubset(set(xrange(1, total+1))):
+        if not parts or not set(parts).issubset(set(range(1, total+1))):
             raise ValueError('Expected parts >= 1 and <= {0}.'.format(total))
         self._parts = parts
         self._total = total

@@ -27,7 +27,7 @@
 from seecr.test import SeecrTestCase, CallTrace
 
 from lxml.etree import parse
-from StringIO import StringIO
+from io import StringIO
 
 from meresco.oaicommon import UpdateAdapterFromOaiDownloadProcessor
 from weightless.core import compose
@@ -48,8 +48,8 @@ class UpdateAdapterTest(SeecrTestCase):
 
         list(compose(adapter.add(identifier='oai:test:identifier', lxmlNode=parse(StringIO(OAI_DELETED_RECORD)), datestamp="2010-10-19T09:57:32Z")))
 
-        self.assertEquals(['delete'], [m.name for m in observer.calledMethods])
-        self.assertEquals({'identifier':'oai:test:identifier'}, observer.calledMethods[0].kwargs)
+        self.assertEqual(['delete'], [m.name for m in observer.calledMethods])
+        self.assertEqual({'identifier':'oai:test:identifier'}, observer.calledMethods[0].kwargs)
 
     def testAdd(self):
         adapter = UpdateAdapterFromOaiDownloadProcessor()
@@ -59,9 +59,9 @@ class UpdateAdapterTest(SeecrTestCase):
         recordNode = parse(StringIO(OAI_RECORD))
         list(compose(adapter.add(identifier='oai:test:identifier', lxmlNode=recordNode, datestamp="2010-10-19T09:57:32Z")))
 
-        self.assertEquals(['add'], [m.name for m in observer.calledMethods])
+        self.assertEqual(['add'], [m.name for m in observer.calledMethods])
         kwargs = observer.calledMethods[0].kwargs
-        self.assertEquals({'identifier': 'oai:test:identifier',
+        self.assertEqual({'identifier': 'oai:test:identifier',
             'partname': 'record',
             'lxmlNode': recordNode}, kwargs)
 

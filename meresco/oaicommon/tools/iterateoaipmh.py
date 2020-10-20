@@ -26,7 +26,8 @@
 ## end license ##
 
 from lxml.etree import parse, tostring
-from urllib import urlencode, urlopen
+from urllib.parse import urlencode
+from urllib.request import urlopen
 from meresco.xml import xpathFirst, xpath
 
 
@@ -43,7 +44,7 @@ class OaiListRequest(object):
     def __init__(self, baseurl, metadataPrefix=None, set=None, from_=None, until=None, resumptionToken=None, verb='ListRecords'):
         if metadataPrefix is None and resumptionToken is None:
             raise ValueError('One of metadataPrefix or resumptionToken is required.')
-        if verb not in VERB_XPATHS.keys():
+        if verb not in list(VERB_XPATHS.keys()):
             raise ValueError('Expected verb to be one of: ' + repr(list(VERB_XPATHS.keys())))
         self.baseurl = baseurl
         self.metadataPrefix = metadataPrefix
@@ -72,7 +73,7 @@ class OaiListRequest(object):
         try:
             return OaiBatch(self, parse(self._urlopen(url)))
         except:
-            print "URL {url}".format(url=url)
+            print("URL {url}".format(url=url))
             raise
 
     def _nextRequest(self, resumptionToken):
@@ -142,7 +143,7 @@ class OaiItem(object):
 def _repr(self):
     return "%s(%s)" % (self.__class__.__name__, ", ".join(
         "%s=%s" % (k, repr(v))
-        for k, v in self.__dict__.items()))
+        for k, v in list(self.__dict__.items())))
 
 
 VERB_XPATHS = {

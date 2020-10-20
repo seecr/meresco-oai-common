@@ -46,4 +46,4 @@ def dumpOai(port, path, oaiDumpDir, metadataPrefix, set_=None, host=None, limit=
             ids.write('%s %s |%s|\n' % ('DEL' if oaiItem.deleted else 'ADD', filename, '|'.join(sorted(oaiItem.setSpecs))))
             if not oaiItem.deleted:
                 open(join(oaiDumpDir, escapeFilename(filename)), 'w').write(lxmltostring(oaiItem.metadata, pretty_print=True))
-    print "Oai dump created in %s" % oaiDumpDir
+    print("Oai dump created in %s" % oaiDumpDir)

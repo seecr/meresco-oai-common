@@ -61,7 +61,7 @@ class ResumptionToken(object):
     def __str__(self):
         return '|'.join("%s%s" % (key, value) for key, value in
                     ((key, getattr(self, attr)) for key, attr in
-                        self.ALL_SHORT.items())
+                        list(self.ALL_SHORT.items()))
                 if value is not None)
 
     def __repr__(self):
@@ -82,6 +82,6 @@ class ResumptionToken(object):
         resumptDict = dict(((part[0], part[1:]) for part in s.split('|') if part))
         if not set(cls.SHORT.keys()).issubset(set(resumptDict.keys())):
             raise ResumptionTokenException()
-        return cls(**dict((cls.ALL_SHORT[k],v) for k,v in resumptDict.items()))
+        return cls(**dict((cls.ALL_SHORT[k],v) for k,v in list(resumptDict.items())))
 
 __all__ = ['ResumptionToken', 'ResumptionTokenException', 'resumptionTokenFromString']

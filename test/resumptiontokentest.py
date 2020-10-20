@@ -37,26 +37,26 @@ class ResumptionTokenTest(SeecrTestCase):
     def assertResumptionToken(self, token):
         aTokenString = str(token)
         token2 = resumptionTokenFromString(aTokenString)
-        self.assertEquals(token, token2)
+        self.assertEqual(token, token2)
 
     def testResumptionToken(self):
         self.assertResumptionToken(ResumptionToken())
         resumptionToken = ResumptionToken(metadataPrefix='oai:dc', continueAfter='100', from_='2002-06-01T19:20:30Z', until='2002-06-01T19:20:39Z', set_='some:set:name')
         self.assertResumptionToken(resumptionToken)
-        self.assertEquals('oai:dc', resumptionToken.metadataPrefix)
-        self.assertEquals('100', resumptionToken.continueAfter)
-        self.assertEquals('2002-06-01T19:20:30Z', resumptionToken.from_)
-        self.assertEquals('2002-06-01T19:20:39Z', resumptionToken.until)
-        self.assertEquals('some:set:name', resumptionToken.set_)
-        self.assertEquals(None, resumptionToken.partition)
+        self.assertEqual('oai:dc', resumptionToken.metadataPrefix)
+        self.assertEqual('100', resumptionToken.continueAfter)
+        self.assertEqual('2002-06-01T19:20:30Z', resumptionToken.from_)
+        self.assertEqual('2002-06-01T19:20:39Z', resumptionToken.until)
+        self.assertEqual('some:set:name', resumptionToken.set_)
+        self.assertEqual(None, resumptionToken.partition)
         self.assertResumptionToken(ResumptionToken(set_=None))
 
     def testResumptionTokenHacked(self):
         r = ResumptionToken.fromString('caap|f|m|u|s')
         # complete nonsense is accepted (for now ????)
-        self.assertEquals('aap', r.continueAfter)
+        self.assertEqual('aap', r.continueAfter)
 
     def testPartition(self):
         r = ResumptionToken(metadataPrefix='prefix', continueAfter='3', partition=Partition.create('1/2'))
-        self.assertEquals('1/2', str(r.partition))
+        self.assertEqual('1/2', str(r.partition))
         self.assertResumptionToken(r)

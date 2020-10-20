@@ -28,12 +28,12 @@ from meresco.oaicommon import stamp2zulutime, timeToNumber
 class StampTest(TestCase):
 
     def testStamp2Zulutime(self):
-        self.assertEquals("2012-10-04T09:21:04Z", stamp2zulutime("1349342464030008"))
-        self.assertEquals("", stamp2zulutime(None))
+        self.assertEqual("2012-10-04T09:21:04Z", stamp2zulutime("1349342464030008"))
+        self.assertEqual("", stamp2zulutime(None))
         self.assertRaises(Exception, stamp2zulutime, "not-a-stamp")
-        self.assertEquals("2012-10-04T09:21:04.030008Z", stamp2zulutime("1349342464030008", preciseDatestamp=True))
+        self.assertEqual("2012-10-04T09:21:04.030008Z", stamp2zulutime("1349342464030008", preciseDatestamp=True))
 
     def testTimeToNumber(self):
         self.assertEqual(1349342464000000, timeToNumber("2012-10-04T09:21:04Z"))
-        self.assertEqual(9223372036854775807000000L, timeToNumber("deze"))
+        self.assertEqual(9223372036854775807000000, timeToNumber("deze"))
 

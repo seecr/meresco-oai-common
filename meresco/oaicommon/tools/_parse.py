@@ -22,7 +22,7 @@
 #
 ## end license ##
 
-from urlparse import parse_qs
+from urllib.parse import parse_qs
 
 def parseOaiPmhListArguments(url):
     baseurl, metadataPrefix, set = url, None, None

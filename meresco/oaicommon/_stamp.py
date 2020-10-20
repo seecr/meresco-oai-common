@@ -24,7 +24,7 @@
 
 from time import time, strftime, gmtime, strptime
 from calendar import timegm
-from sys import maxint
+from sys import maxsize
 
 def stamp2zulutime(stamp, preciseDatestamp=False):
     if stamp is None:
