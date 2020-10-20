@@ -38,9 +38,9 @@ simplefilter('default')
 # from partitiontest import PartitionTest
 from resumptiontokentest import ResumptionTokenTest
 from stamptest import StampTest
-# from updateadaptertest import UpdateAdapterTest
-#
-# from tools.iterateoaipmhtest import IterateOaiPmhTest
+from updateadaptertest import UpdateAdapterTest
+
+from tools.iterateoaipmhtest import IterateOaiPmhTest
 
 if __name__ == '__main__':
     unittest.main()
