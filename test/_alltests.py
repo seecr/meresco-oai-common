@@ -35,7 +35,7 @@ from warnings import simplefilter
 simplefilter('default')
 
 # from oaidownloadprocessortest import OaiDownloadProcessorTest
-# from partitiontest import PartitionTest
+from partitiontest import PartitionTest
 from resumptiontokentest import ResumptionTokenTest
 from stamptest import StampTest
 from updateadaptertest import UpdateAdapterTest

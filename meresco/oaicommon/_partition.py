@@ -52,7 +52,7 @@ class Partition(object):
 
     @classmethod
     def hashId(cls, identifier):
-        return int(int(sha1(identifier).hexdigest(),16) % cls.NR_OF_PARTS)
+        return int(int(sha1(identifier.encode('utf-8')).hexdigest(),16) % cls.NR_OF_PARTS)
 
     def ranges(self):
         partSize = int(ceil(self.NR_OF_PARTS / float(self._total)))
