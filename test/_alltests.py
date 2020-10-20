@@ -37,7 +37,7 @@ simplefilter('default')
 # from oaidownloadprocessortest import OaiDownloadProcessorTest
 # from partitiontest import PartitionTest
 from resumptiontokentest import ResumptionTokenTest
-# from stamptest import StampTest
+from stamptest import StampTest
 # from updateadaptertest import UpdateAdapterTest
 #
 # from tools.iterateoaipmhtest import IterateOaiPmhTest

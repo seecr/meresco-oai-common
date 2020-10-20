@@ -40,7 +40,7 @@ def timeToNumber(time):
     try:
         return int(timegm(strptime(time, '%Y-%m-%dT%H:%M:%SZ')) * DATESTAMP_FACTOR)
     except (ValueError, OverflowError):
-        return maxint * DATESTAMP_FACTOR
+        return maxsize * DATESTAMP_FACTOR
 
 DATESTAMP_FACTOR = 1000000
 
