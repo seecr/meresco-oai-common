@@ -3,7 +3,7 @@
 # "Meresco Oai Common" are utils to support "Meresco Oai".
 #
 # Copyright (C) 2013-2014 Netherlands Institute for Sound and Vision http://instituut.beeldengeluid.nl/
-# Copyright (C) 2013-2015, 2017-2018 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2013-2015, 2017-2018, 2020 Seecr (Seek You Too B.V.) http://seecr.nl
 # Copyright (C) 2015 Koninklijke Bibliotheek (KB) http://www.kb.nl
 # Copyright (C) 2017 SURFmarket https://surf.nl
 #
