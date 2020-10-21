@@ -41,6 +41,7 @@ from weightless.io import Suspend
 
 from meresco.core import Observable
 from meresco.components import lxmltostring, Schedule
+from meresco.components.json import JsonDict
 
 from meresco.oaicommon import OaiDownloadProcessor
 
@@ -115,9 +116,9 @@ class OaiDownloadProcessorTest(SeecrTestCase):
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", set="setName", workingDirectory=self.tempdir, xWait=True)
         self.assertEqual("""GET /oai?verb=ListRecords&metadataPrefix=oai_dc&set=setName&x-wait=True HTTP/1.0\r\nX-Meresco-Oai-Client-Identifier: %s\r\nUser-Agent: Meresco-Oai-DownloadProcessor/5.x\r\n\r\n""" % oaiDownloadProcessor._identifier, oaiDownloadProcessor.buildRequest())
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", set="set-_.!~*'()", workingDirectory=self.tempdir, xWait=True)
-        self.assertEqual("""GET /oai?verb=ListRecords&metadataPrefix=oai_dc&set=set-_.%%21%%7E%%2A%%27%%28%%29&x-wait=True HTTP/1.0\r\nX-Meresco-Oai-Client-Identifier: %s\r\nUser-Agent: Meresco-Oai-DownloadProcessor/5.x\r\n\r\n""" % oaiDownloadProcessor._identifier, oaiDownloadProcessor.buildRequest())
+        self.assertEqual("""GET /oai?verb=ListRecords&metadataPrefix=oai_dc&set=set-_.%%21~%%2A%%27%%28%%29&x-wait=True HTTP/1.0\r\nX-Meresco-Oai-Client-Identifier: %s\r\nUser-Agent: Meresco-Oai-DownloadProcessor/5.x\r\n\r\n""" % oaiDownloadProcessor._identifier, oaiDownloadProcessor.buildRequest())
         resumptionToken = "u|c1286437597991025|mprefix|s|f"
-        open(join(self.tempdir, 'harvester.state'), 'w').write("Resumptiontoken: %s\n" % resumptionToken)
+        with open(join(self.tempdir, 'harvester.state'), 'w') as f: f.write("Resumptiontoken: %s\n" % resumptionToken)
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", set="setName", workingDirectory=self.tempdir, xWait=True)
         self.assertEqual("""GET /oai?verb=ListRecords&resumptionToken=u%%7Cc1286437597991025%%7Cmprefix%%7Cs%%7Cf&x-wait=True HTTP/1.0\r\nX-Meresco-Oai-Client-Identifier: %s\r\nUser-Agent: Meresco-Oai-DownloadProcessor/5.x\r\n\r\n""" % oaiDownloadProcessor._identifier, oaiDownloadProcessor.buildRequest())
 
@@ -199,7 +200,7 @@ class OaiDownloadProcessorTest(SeecrTestCase):
 
     def testListRecordsRequestError(self):
         resumptionToken = "u|c1286437597991025|mprefix|s|f"
-        open(join(self.tempdir, 'harvester.state'), 'w').write("Resumptiontoken: %s\n" % resumptionToken)
+        with open(join(self.tempdir, 'harvester.state'), 'w') as f: f.write("Resumptiontoken: %s\n" % resumptionToken)
         observer = CallTrace()
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", workingDirectory=self.tempdir, xWait=True, err=StringIO())
         oaiDownloadProcessor.addObserver(observer)
@@ -221,7 +222,7 @@ class OaiDownloadProcessorTest(SeecrTestCase):
 
     def testReadResumptionTokenFromStateWithNewline(self):
         resumptionToken = "u|c1286437597991025|mprefix|s|f"
-        open(join(self.tempdir, 'harvester.state'), 'w').write("Resumptiontoken: %s\n" % resumptionToken)
+        with open(join(self.tempdir, 'harvester.state'), 'w') as f:f.write("Resumptiontoken: %s\n" % resumptionToken)
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", workingDirectory=self.tempdir, xWait=True, err=StringIO())
         self.assertEqual(resumptionToken, oaiDownloadProcessor._resumptionToken)
 
@@ -230,13 +231,13 @@ class OaiDownloadProcessorTest(SeecrTestCase):
         self.assertEqual(None, oaiDownloadProcessor._resumptionToken)
 
     def testReadInvalidState(self):
-        open(join(self.tempdir, 'harvester.state'), 'w').write("invalid")
+        with open(join(self.tempdir, 'harvester.state'), 'w') as f: f.write("invalid")
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", workingDirectory=self.tempdir, xWait=True, err=StringIO())
         self.assertEqual(None, oaiDownloadProcessor._resumptionToken)
 
     def testKeepResumptionTokenOnFailingAddCall(self):
         resumptionToken = "u|c1286437597991025|mprefix|s|f"
-        open(join(self.tempdir, 'harvester.state'), 'w').write("Resumptiontoken: %s\n" % resumptionToken)
+        with open(join(self.tempdir, 'harvester.state'), 'w') as f: f.write("Resumptiontoken: %s\n" % resumptionToken)
         observer = CallTrace()
         observer.exceptions={'add': Exception("Could be anything")}
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", workingDirectory=self.tempdir, xWait=True, err=StringIO())
@@ -315,7 +316,7 @@ class OaiDownloadProcessorTest(SeecrTestCase):
 
     def testHarvesterStateWithError(self):
         resumptionToken = "u|c1286437597991025|mprefix|s|f"
-        open(join(self.tempdir, 'harvester.state'), 'w').write("Resumptiontoken: %s\n" % resumptionToken)
+        with open(join(self.tempdir, 'harvester.state'), 'w') as f: f.write("Resumptiontoken: %s\n" % resumptionToken)
         observer = CallTrace()
         observer.exceptions={'add': Exception("Could be anything")}
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", workingDirectory=self.tempdir, xWait=True, err=StringIO(), name="Name")
@@ -338,7 +339,8 @@ class OaiDownloadProcessorTest(SeecrTestCase):
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", workingDirectory=self.tempdir, xWait=True)
         currentIdentifier = oaiDownloadProcessor._identifier
         self.assertTrue(isfile(identifierFilepath))
-        self.assertEqual(currentIdentifier, open(identifierFilepath).read())
+        with open(identifierFilepath) as f:
+            self.assertEqual(currentIdentifier, f.read())
         self.assertEqual("""GET /oai?verb=ListRecords&metadataPrefix=oai_dc&x-wait=True HTTP/1.0\r\nX-Meresco-Oai-Client-Identifier: %s\r\nUser-Agent: Meresco-Oai-DownloadProcessor/5.x\r\n\r\n""" % currentIdentifier, oaiDownloadProcessor.buildRequest())
 
         oaiDownloadProcessor = OaiDownloadProcessor(path="/oai", metadataPrefix="oai_dc", workingDirectory=self.tempdir, xWait=True)
@@ -354,7 +356,7 @@ class OaiDownloadProcessorTest(SeecrTestCase):
         self.assertFalse(isfile(join(self.tempdir, 'harvester.state')))
 
         oaiDownloadProcessor.handleShutdown()
-        self.assertEqual({"errorState": None, 'from': '2002-06-01T19:20:30Z', "resumptionToken": state.resumptionToken}, load(open(join(self.tempdir, 'harvester.state'))))
+        self.assertEqual({"errorState": None, 'from': '2002-06-01T19:20:30Z', "resumptionToken": state.resumptionToken}, JsonDict.load(join(self.tempdir, 'harvester.state')))
 
     def testResponseDateAsFrom(self):
         observer = CallTrace(emptyGeneratorMethods=['add'])
@@ -478,7 +480,7 @@ class OaiDownloadProcessorTest(SeecrTestCase):
 
 ONE_RECORD = '<record xmlns="http://www.openarchives.org/OAI/2.0/"><header><identifier>oai:identifier:1</identifier><datestamp>2011-08-22T07:34:00Z</datestamp></header><metadata>ignored</metadata></record>'
 
-LISTRECORDS_RESPONSE = """<?xml version="1.0" encoding="UTF-8" ?>
+LISTRECORDS_RESPONSE = """\
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
   <responseDate>2002-06-01T19:20:30Z</responseDate>
   <request verb="ListRecords" from="1998-01-15"
@@ -489,7 +491,7 @@ LISTRECORDS_RESPONSE = """<?xml version="1.0" encoding="UTF-8" ?>
 </OAI-PMH>
 """ % (ONE_RECORD + "%s")
 
-ERROR_RESPONSE = """<?xml version="1.0" encoding="UTF-8" ?>
+ERROR_RESPONSE = """\
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
@@ -501,7 +503,7 @@ ERROR_RESPONSE = """<?xml version="1.0" encoding="UTF-8" ?>
 </OAI-PMH>
 """
 
-NO_RECORDS_MATCH_RESPONSE = """<?xml version="1.0" encoding="UTF-8" ?>
+NO_RECORDS_MATCH_RESPONSE = """\
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
@@ -519,7 +521,7 @@ RESUMPTION_TOKEN = """<resumptionToken expirationDate="2002-06-01T23:20:00Z"
 
 ONE_HEADER = '<header xmlns="http://www.openarchives.org/OAI/2.0/"><identifier>oai:identifier:1</identifier><datestamp>2011-08-22T07:34:00Z</datestamp></header>'
 
-LISTIDENTIFIERS_RESPONSE = """<?xml version="1.0" encoding="UTF-8" ?>
+LISTIDENTIFIERS_RESPONSE = """\
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
   <responseDate>2002-06-01T19:20:30Z</responseDate>
   <request verb="ListRecords" from="1998-01-15"

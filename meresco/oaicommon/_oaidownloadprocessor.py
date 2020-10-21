@@ -46,7 +46,7 @@ from meresco.xml.namespaces import curieToTag
 
 
 namespaces = {'oai': "http://www.openarchives.org/OAI/2.0/"}
-_UNSPECIFIED = type('_UNSPECIFIED', (object,), {'__nonzero__': lambda s: False})()
+_UNSPECIFIED = 'UNSPECIFIED'
 
 
 class OaiDownloadProcessor(Observable):
@@ -63,10 +63,10 @@ class OaiDownloadProcessor(Observable):
         self._err = err or stderr
         self._verb = verb or 'ListRecords'
         self._autoCommit = autoCommit
-        if restartAfterFinish and incrementalHarvestSchedule:
+        if restartAfterFinish and incrementalHarvestSchedule and incrementalHarvestSchedule != _UNSPECIFIED:
             raise ValueError("In case restartAfterFinish==True, incrementalHarvestSchedule must not be set")
         self._restartAfterFinish = restartAfterFinish
-        if incrementalHarvestSchedule is _UNSPECIFIED and not restartAfterFinish:
+        if incrementalHarvestSchedule == _UNSPECIFIED and not restartAfterFinish:
             incrementalHarvestSchedule = Schedule(timeOfDay='00:00')
         self._incrementalHarvestSchedule = incrementalHarvestSchedule
         self._resumptionToken = None
@@ -76,10 +76,10 @@ class OaiDownloadProcessor(Observable):
         self._readState()
         self._identifierFilePath = join(workingDirectory, "harvester.identifier")
         if isfile(self._identifierFilePath):
-            self._identifier = open(self._identifierFilePath).read().strip()
+            self._identifier = _open_read(self._identifierFilePath).strip()
         else:
             self._identifier = str(uuid4())
-            open(self._identifierFilePath, 'w').write(self._identifier)
+            with open(self._identifierFilePath, 'w') as f: f.write(self._identifier)
 
     def setPath(self, path):
         self._path = path
@@ -230,7 +230,7 @@ class OaiDownloadProcessor(Observable):
         self._resumptionToken = None
         self._errorState = None
         if isfile(self._stateFilePath):
-            state = open(self._stateFilePath).read()
+            state = _open_read(self._stateFilePath)
             if not state.startswith('{'):
                 if RESUMPTIONTOKEN_STATE in state:
                     self._resumptionToken = state.split(RESUMPTIONTOKEN_STATE)[-1].strip()
@@ -254,6 +254,10 @@ class OaiDownloadProcessor(Observable):
 
     def _time(self):
         return time()
+
+def _open_read(path):
+    with open(path) as f:
+        return f.read()
 
 
 class HarvestStateView(object):
