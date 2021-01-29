@@ -3,8 +3,12 @@
 #
 # "Meresco Oai Common" are utils to support "Meresco Oai".
 #
-# Copyright (C) 2012-2013, 2018 Seecr (Seek You Too B.V.) http://seecr.nl
+# Copyright (C) 2012-2013, 2018, 2020-2021 Seecr (Seek You Too B.V.) https://seecr.nl
 # Copyright (C) 2013 Stichting Bibliotheek.nl (BNL) http://www.bibliotheek.nl
+# Copyright (C) 2020-2021 Data Archiving and Network Services https://dans.knaw.nl
+# Copyright (C) 2020-2021 SURF https://www.surf.nl
+# Copyright (C) 2020-2021 Stichting Kennisnet https://www.kennisnet.nl
+# Copyright (C) 2020-2021 The Netherlands Institute for Sound and Vision https://beeldengeluid.nl
 #
 # This file is part of "Meresco Oai Common"
 #
@@ -31,18 +35,14 @@ mydir=$(cd $(dirname $0); pwd)
 rm -rf tmp build
 
 definePythonVars
-$PYTHON setup.py install --root tmp
+${PYTHON} setup.py install --root tmp
 removeDoNotDistribute tmp
 cp -r test tmp/test
 find tmp -type f -exec sed -e "
     s,^usrSharePath.*$,usrSharePath='$mydir/tmp/usr/share/meresco.oaicommon',;
     " -i {} \;
 
-if [ -z "$@" ]; then
-    runtests "alltests.sh"
-else
-    runtests "$@"
-fi
+runtests "$@"
 
 
 rm -rf tmp build
