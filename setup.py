@@ -33,8 +33,7 @@ from distutils.core import setup
 from os import walk
 from os.path import join
 
-version = "%VERSION%"
-version = 0   #DO_NOT_DISTRIBUTE
+version = '$Version: 0$'[9:-1].strip()
 
 data_files = []
 for path, dirs, files in walk('usr-share'):
