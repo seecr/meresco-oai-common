@@ -33,6 +33,9 @@ from distutils.core import setup
 from os import walk
 from os.path import join
 
+version = "%VERSION%"
+version = 0   #DO_NOT_DISTRIBUTE
+
 data_files = []
 for path, dirs, files in walk('usr-share'):
         data_files.append((path.replace('usr-share', '/usr/share/meresco-oai-common', 1), [join(path, f) for f in files]))
@@ -54,7 +57,7 @@ setup(
     ] + packages,
     scripts=scripts,
     data_files=data_files,
-    version = '%VERSION%',
+    version=version,
     url = 'https://www.seecr.nl',
     author = 'Seecr',
     author_email = 'info@seecr.nl',
